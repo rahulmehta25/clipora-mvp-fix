@@ -1,0 +1,8 @@
+{
+  "name": "clipora",
+  "private": true,
+  "scripts": {
+    "ui": "cd \"PlayO Prototyping Studio UI\" && npm run dev",
+    "web": "cd \"PlayO Prototyping Studio UI\" && npm run dev"
+  }
+}
