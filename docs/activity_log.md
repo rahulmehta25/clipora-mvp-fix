@@ -1,5 +1,17 @@
 # Activity Log
 
+## 2026-03-07 20:10 EST
+
+### User Prompt
+"Build a deployable web demo with video analysis, clip cards, creator analytics, and platform comparison sections"
+
+### Actions Taken
+- Rewrote `web-ui-reference/src/App.tsx` with full demo: hero, video analysis with interactive timeline, 5 clip cards with captions/audio/posting times, creator analytics with heatmap and demographics, TikTok/Reels/Shorts platform comparison
+- Updated `web-ui-reference/index.html` — violet favicon, cleaned up meta tags
+- Updated `web-ui-reference/src/index.css` — light-only theme with violet-600 accent, removed dark mode
+- Updated `web-ui-reference/tailwind.config.js` — added violet color scale, removed dark mode selector
+- Deployed to Vercel: https://web-ui-reference.vercel.app
+
 ## 2026-02-18 — Priority: Mobile in Expo Go
 
 ### Goal
@@ -157,5 +169,23 @@ Get the Clipora mobile app running in Expo Go.
 - Backend API deployment fixed (DB connection variables now properly injected)
 - Mobile upload flow wired to real API
 - Ready for testing: cd mobile && npm install && npx expo start
+
+---
+
+## 2026-03-07 17:30 EST
+
+### User Prompt
+"Deploy Clipora to Vercel for YC application demo"
+
+### Actions Taken
+- Created LandingPage component with hero section, feature grid, stats bar, how-it-works section, and CTA
+- Rewrote App.tsx to start with landing page and wrap demo in iPhone phone frame mockup
+- Updated index.html with proper meta tags (OG, Twitter Card), inline SVG favicon, Inter font
+- Updated index.css with custom animations (fade-in, slide-up, float, pulse)
+- Upgraded index.tsx to use React 18 createRoot API
+- Enhanced mock data with better clip titles, rationales, and gradient thumbnails
+- Deployed to Vercel at https://web-ui-reference.vercel.app
+- Files modified: web-ui-reference/src/App.tsx, web-ui-reference/src/index.tsx, web-ui-reference/src/index.css, web-ui-reference/index.html
+- Files created: web-ui-reference/src/screens/LandingPage.tsx
 
 ---
