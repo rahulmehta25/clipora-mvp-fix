@@ -59,3 +59,4 @@ temp/
 infrastructure/github-sa-key*.json
 infrastructure/github-sa-key*.txt
 .vercel
+infrastructure/github-sa-key.json
