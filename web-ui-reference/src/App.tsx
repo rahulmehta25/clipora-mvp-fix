@@ -215,7 +215,7 @@ function Nav() {
         <div className="flex items-center gap-3">
           <span className="hidden sm:inline text-xs text-neutral-400 bg-neutral-100 px-2.5 py-1 rounded-md">Hacklytics 2026</span>
           <a
-            href="https://github.com"
+            href="https://github.com/rahulmehta25/LetsGoViral"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm font-medium text-violet-600 hover:text-violet-700 transition-colors flex items-center gap-1"
@@ -276,7 +276,7 @@ function HeroSection() {
             <a href="#analysis" className="inline-flex px-5 py-2.5 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-700 transition-colors">
               See demo below
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="inline-flex px-5 py-2.5 bg-white text-neutral-700 text-sm font-medium rounded-lg border border-neutral-200 hover:bg-neutral-50 transition-colors">
+            <a href="https://github.com/rahulmehta25/LetsGoViral" target="_blank" rel="noopener noreferrer" className="inline-flex px-5 py-2.5 bg-white text-neutral-700 text-sm font-medium rounded-lg border border-neutral-200 hover:bg-neutral-50 transition-colors">
               View on GitHub
             </a>
           </div>
