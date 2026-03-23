@@ -186,3 +186,87 @@ gcloud sql instances patch clipora-db --activation-policy ALWAYS
 ## License
 
 MIT
+
+## System Architecture Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+
+    %% Actors
+    box rgb(66, 133, 244) Client Apps
+        participant WebApp as React + Vite<br/>Web App
+        participant MobileApp as React Native (Expo)<br/>Mobile App
+    end
+
+    participant API as Node.js/Express API<br/>(Cloud Run)
+    participant GCS as Google Cloud Storage
+    participant PostgreSQL as PostgreSQL<br/>(Metadata Store)
+    participant VideoIntel as Video Intelligence API<br/>(Shot Detection)
+    participant Transcription as Transcription Service
+    participant Gemini as Gemini<br/>(Multimodal Virality Scoring)
+    participant FFmpeg as FFmpeg<br/>(Clip Extraction)
+    participant CDN as CDN<br/>(Delivery)
+
+    Note over WebApp,CDN: Infrastructure provisioned via Terraform IaC
+
+    %% Parallel Upload from Web and Mobile
+    par Web Upload
+        WebApp->>+API: POST /api/videos/upload
+        API->>API: Validate request & auth
+    and Mobile Upload
+        MobileApp->>+API: POST /api/videos/upload
+        API->>API: Validate request & auth
+    end
+
+    %% Upload to GCS
+    API->>+GCS: Upload video (signed URL)
+    GCS-->>-API: Upload complete (video_uri)
+
+    API->>PostgreSQL: INSERT video record (pending)
+    PostgreSQL-->>API: video_id
+
+    %% Acknowledge upload to clients
+    par Web Response
+        API-->>WebApp: 202 Accepted {video_id, status: processing}
+    and Mobile Response
+        API-->>-MobileApp: 202 Accepted {video_id, status: processing}
+    end
+
+    %% Async Processing Pipeline
+    rect rgb(240, 240, 240)
+        Note over API,CDN: Async Processing Pipeline (Cloud Run Job / Pub/Sub triggered)
+
+        %% Shot Detection
+        API->>+VideoIntel: Analyze video (shot detection)
+        VideoIntel->>GCS: Read video
+        VideoIntel-->>-API: Shot boundaries + scene labels
+
+        API->>PostgreSQL: UPDATE shots metadata
+
+        %% Transcription
+        API->>+Transcription: Extract audio & transcribe
+        Transcription->>GCS: Read video audio track
+        Transcription-->>-API: Timestamped transcript
+
+        API->>PostgreSQL: UPDATE transcript data
+
+        %% Gemini Scoring
+        API->>+Gemini: Score clips (multimodal)
+        Note right of Gemini: Inputs:<br/>- Video frames<br/>- Shot boundaries<br/>- Transcript<br/>- Scene labels
+        Gemini-->>-API: Virality scores + top clip timestamps
+
+        API->>PostgreSQL: UPDATE virality scores
+
+        %% FFmpeg Extraction
+        loop For each top-scored clip
+            API->>+FFmpeg: Extract clip (start, end, format)
+            FFmpeg->>GCS: Read source video
+            FFmpeg->>GCS: Write extracted clip
+            GCS-->>FFmpeg: Clip URI
+            FFmpeg-->>-API: Clip metadata
+            API->>PostgreSQL: INSERT clip record
+        end
+
+        %% CDN Distribution
+
